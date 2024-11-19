@@ -1,0 +1,108 @@
+<div class="container mt-4">
+  <h2>Contact Management</h2>
+
+  <!-- Search Bar -->
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search contacts by name or email"
+      [(ngModel)]="searchText"
+      (input)="onSearch()"
+    />
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- Contact Form -->
+  <form [formGroup]="contactForm" (ngSubmit)="saveContact()">
+    <div class="row">
+      <div class="col-md-4">
+        <label for="firstName">First Name</label>
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          class="form-control"
+        />
+        <small
+          class="text-danger"
+          *ngIf="contactForm.get('firstName')?.touched && contactForm.get('firstName')?.invalid"
+        >
+          First Name is required.
+        </small>
+      </div>
+
+      <div class="col-md-4">
+        <label for="lastName">Last Name</label>
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          class="form-control"
+        />
+        <small
+          class="text-danger"
+          *ngIf="contactForm.get('lastName')?.touched && contactForm.get('lastName')?.invalid"
+        >
+          Last Name is required.
+        </small>
+      </div>
+
+      <div class="col-md-4">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="form-control"
+        />
+        <small
+          class="text-danger"
+          *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.invalid"
+        >
+          Please provide a valid email address.
+        </small>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="contactForm.invalid">
+      {{ editMode ? 'Update Contact' : 'Add Contact' }}
+    </button>
+    <button type="button" class="btn btn-secondary mt-3" (click)="resetForm()">
+      Cancel
+    </button>
+  </form>
+
+  <!-- Contact Table -->
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contact of filteredContacts">
+        <td>{{ contact.id }}</td>
+        <td>{{ contact.firstName }}</td>
+        <td>{{ contact.lastName }}</td>
+        <td>{{ contact.email }}</td>
+        <td>
+          <button class="btn btn-sm btn-info" (click)="editContact(contact)">
+            Edit
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteContact(contact.id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
